@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as ReservationsRouteImport } from './routes/reservations'
 import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as SchedulesRouteImport } from './routes/schedules'
@@ -23,6 +25,16 @@ const IndexRoute = IndexRouteImport.update({
 const CalendarRoute = CalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReservationsRoute = ReservationsRouteImport.update({
@@ -44,6 +56,8 @@ const SchedulesRoute = SchedulesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/notifications': typeof NotificationsRoute
+  '/reports': typeof ReportsRoute
   '/reservations': typeof ReservationsRoute
   '/rooms': typeof RoomsRoute
   '/schedules': typeof SchedulesRoute
@@ -51,6 +65,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/notifications': typeof NotificationsRoute
+  '/reports': typeof ReportsRoute
   '/reservations': typeof ReservationsRoute
   '/rooms': typeof RoomsRoute
   '/schedules': typeof SchedulesRoute
@@ -59,21 +75,47 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/notifications': typeof NotificationsRoute
+  '/reports': typeof ReportsRoute
   '/reservations': typeof ReservationsRoute
   '/rooms': typeof RoomsRoute
   '/schedules': typeof SchedulesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/calendar' | '/reservations' | '/rooms' | '/schedules'
+  fullPaths:
+    | '/'
+    | '/calendar'
+    | '/notifications'
+    | '/reports'
+    | '/reservations'
+    | '/rooms'
+    | '/schedules'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/calendar' | '/reservations' | '/rooms' | '/schedules'
-  id: '__root__' | '/' | '/calendar' | '/reservations' | '/rooms' | '/schedules'
+  to:
+    | '/'
+    | '/calendar'
+    | '/notifications'
+    | '/reports'
+    | '/reservations'
+    | '/rooms'
+    | '/schedules'
+  id:
+    | '__root__'
+    | '/'
+    | '/calendar'
+    | '/notifications'
+    | '/reports'
+    | '/reservations'
+    | '/rooms'
+    | '/schedules'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ReportsRoute: typeof ReportsRoute
   ReservationsRoute: typeof ReservationsRoute
   RoomsRoute: typeof RoomsRoute
   SchedulesRoute: typeof SchedulesRoute
@@ -93,6 +135,20 @@ declare module '@tanstack/react-router' {
       path: '/calendar'
       fullPath: '/calendar'
       preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reservations': {
@@ -122,6 +178,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
+  NotificationsRoute: NotificationsRoute,
+  ReportsRoute: ReportsRoute,
   ReservationsRoute: ReservationsRoute,
   RoomsRoute: RoomsRoute,
   SchedulesRoute: SchedulesRoute,

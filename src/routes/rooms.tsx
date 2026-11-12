@@ -22,7 +22,6 @@ export const Route = createFileRoute("/rooms")({
 });
 
 const EQUIP = ["Projector", "TV Display", "Computers", "Aircon", "Whiteboard", "Sound System", "Video Conferencing"];
-const toHM = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 
 function RoomsPage() {
   const s = useStore();
@@ -158,4 +157,3 @@ function RoomDialog({ r, date, start, end, people, onClose }: { r: RankedRoom; d
     </Dialog>
   );
 }
-export { toHM };

@@ -8,7 +8,7 @@ export function overlaps(aStart: number, aEnd: number, bStart: number, bEnd: num
 
 export function dayOf(date: string): Day | null {
   const d = new Date(date + "T00:00:00").getDay();
-  return d === 0 ? null : DAYS[d - 1];
+  return d === 0 ? null : (DAYS[d - 1] ?? null);
 }
 
 export function fmtTime(m: number) {
@@ -19,7 +19,7 @@ export function fmtTime(m: number) {
 }
 
 export function parseTime(t: string) {
-  const [h, m] = t.split(":").map(Number);
+  const [h = 0, m = 0] = t.split(":").map(Number);
   return h * 60 + m;
 }
 
@@ -113,7 +113,7 @@ export function hitByEvent(e: CalendarEvent, reservations: Reservation[]) {
 }
 
 /** Reminder times: 10 and 5 minutes before the end. */
-export function reminderTimes(end: number) {
+export function reminderTimes(end: number): [number, number] {
   return [end - 10, end - 5];
 }
 
@@ -166,12 +166,12 @@ export interface Conflict {
 export function scheduleConflicts(schedules: ClassSchedule[], rooms: Room[]): Conflict[] {
   const out: Conflict[] = [];
   for (let i = 0; i < schedules.length; i++) {
-    const a = schedules[i];
+    const a = schedules[i]!;
     const room = rooms.find((r) => r.id === a.roomId);
     if (room && a.classSize > room.capacity)
       out.push({ kind: "capacity", message: `${a.course} ${a.section} has ${a.classSize} students but ${room.name} seats ${room.capacity}`, ids: [a.id] });
     for (let j = i + 1; j < schedules.length; j++) {
-      const b = schedules[j];
+      const b = schedules[j]!;
       if (a.day !== b.day || !overlaps(a.start, a.end, b.start, b.end)) continue;
       const when = `${a.day} ${fmtTime(Math.max(a.start, b.start))}`;
       if (a.roomId === b.roomId) out.push({ kind: "room", message: `${room?.name ?? a.roomId} double-booked ${when}: ${a.course} & ${b.course}`, ids: [a.id, b.id] });
@@ -188,7 +188,7 @@ export interface SlotRequest {
   faculty: string;
   classSize: number;
   duration: number;
-  roomType?: Room["type"];
+  roomType?: Room["type"] | undefined;
   equipment?: string[];
 }
 
